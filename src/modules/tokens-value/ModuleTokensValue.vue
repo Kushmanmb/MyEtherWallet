@@ -2,7 +2,7 @@
   <white-sheet class="px-5 px-lg-7 py-5 d-flex justify-space-between">
     <div>
       <h2 class="pb-3">{{ tokenTitle }}</h2>
-      <h2 class="pb-3">$ {{ totalTokenValues }}</h2>
+      <h2 class="pb-3">{{ totalTokenValues }}</h2>
       <v-row justify="space-around">
         <v-col v-for="(img, idx) in tokenImages" :key="idx + img" cols="2">
           <img :src="img" height="32px" />
@@ -17,22 +17,17 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import BigNumber from 'bignumber.js';
 export default {
   name: 'ModuleTokensValue',
   computed: {
     ...mapGetters('wallet', ['tokensList']),
     ...mapGetters('global', ['getFiatValue']),
+    ...mapGetters('external', ['totalTokenFiatValue']),
     tokenTitle() {
       return `My Token${this.tokensList.length > 1 ? 's' : ''} Value`;
     },
     totalTokenValues() {
-      let total = BigNumber(0);
-      this.tokensList.forEach(token => {
-        const value = token.usdBalance ? token.usdBalance : 0;
-        total = total.plus(value);
-      });
-      return this.getFiatValue(total);
+      return this.getFiatValue(this.totalTokenFiatValue);
     },
     tokenImages() {
       const firstFive = this.tokensList.slice(0, 5);
