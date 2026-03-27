@@ -151,17 +151,19 @@ const setTokenAndEthBalance = function ({
       hasPreTokens.forEach(t => {
         if (!t.contract) return;
         const token = getters.contractToToken(t.contract);
-        if (!token) {
+        if (!token || (!token.name && !token.symbol)) {
           promises.push(
             getTokenInfo(t.contract, rootState.wallet.web3).then(info => {
               if (info) {
-                rootState.external.networkTokens.set({
-                  name: info.name,
-                  symbol: info.symbol,
-                  decimals: info.decimals,
-                  address: t.contract,
-                  balance: t.balance
-                });
+                rootState.external.networkTokens.set(
+                  t.contract.toLowerCase(),
+                  {
+                    name: info.name,
+                    symbol: info.symbol,
+                    decimals: info.decimals,
+                    address: t.contract
+                  }
+                );
               }
             })
           );
