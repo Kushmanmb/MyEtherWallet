@@ -58,6 +58,16 @@ class Web3Calls {
         requestManager
       }),
       new Method({
+        name: 'call',
+        call: 'eth_call',
+        params: 2,
+        inputFormatter: [
+          formatters.inputCallFormatter,
+          formatters.inputDefaultBlockNumberFormatter
+        ],
+        requestManager
+      }),
+      new Method({
         name: 'getTransactionCount',
         call: 'eth_getTransactionCount',
         params: 2,
