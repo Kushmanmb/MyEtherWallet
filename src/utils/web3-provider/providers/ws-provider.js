@@ -13,7 +13,8 @@ import {
   ethAccounts,
   ethCoinbase,
   ethGetTransactionCount,
-  netVersion
+  netVersion,
+  ethCall
 } from '../methods';
 import { parseXDCValues } from './xdc-parser';
 const MAX_RETRIES = 10;
@@ -88,6 +89,7 @@ class WSProvider {
       middleware.use(ethGetTransactionCount);
       middleware.use(ethCoinbase);
       middleware.use(netVersion);
+      middleware.use(ethCall);
       middleware.run(req, callback).then(() => {
         this.wsProvider.connection.send(JSON.stringify(payload));
         const tempCB = (err, res) => {
